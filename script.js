@@ -48,7 +48,7 @@ function renderDefinition(entry) {
   return `
     <article class="entry">
       <h2>${entry.word}</h2>
-      ${entry.phonetic ? `<p class="phonetic-primary">Pronunciation: ${entry.phonetic}</p>` : ''}
+      <!--${entry.phonetic ? `<p class="phonetic-primary">Pronunciation: ${entry.phonetic}</p>` : ''} -->
       ${phoneticsSection}
       ${entry.origin ? `<p class="origin">Origin: ${entry.origin}</p>` : ''}
       ${meaningsHtml}
@@ -90,7 +90,7 @@ form.addEventListener('submit', async (event) => {
 
     resultEl.innerHTML = entries.map(renderDefinition).join('');
     
-    // Add audio playback listeners
+    //Add audio playback listeners
     document.querySelectorAll('.play-audio').forEach(button => {
       button.addEventListener('click', () => {
         const audioUrl = button.dataset.audio;
