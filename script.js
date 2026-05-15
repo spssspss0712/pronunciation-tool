@@ -9,7 +9,12 @@ function renderPhonetics(phonetics) {
 
   const phoneticsHtml = phonetics.map((phonetic) => {
     const audioButton = phonetic.audio
-      ? `<button class="play-audio" data-audio="${phonetic.audio}" title="Play audio">🔊</button>`
+      ? `<div class="audio-control">
+          <button class="play-audio" data-audio="${phonetic.audio}" title="Play audio">🔊</button>
+          <label class="slow-speed-label" style="display:none; margin-top:0.25rem;">
+            <input class="slow-speed-toggle" type="checkbox" /> Play slow (0.5×)
+          </label>
+        </div>`
       : '';
     return `
       <div class="phonetic-item">
@@ -90,11 +95,28 @@ form.addEventListener('submit', async (event) => {
 
     resultEl.innerHTML = entries.map(renderDefinition).join('');
     
-    //Add audio playback listeners
     document.querySelectorAll('.play-audio').forEach(button => {
+      const audioUrl = button.dataset.audio;
+      const audioControl = button.parentElement;
+      const toggle = audioControl.querySelector('.slow-speed-toggle');
+      const toggleLabel = audioControl.querySelector('.slow-speed-label');
+
+      if (toggleLabel) {
+        const preloadAudio = new Audio();
+        preloadAudio.preload = 'auto';
+        preloadAudio.src = audioUrl;
+        preloadAudio.addEventListener('canplaythrough', () => {
+          toggleLabel.style.display = 'inline-flex';
+        });
+        preloadAudio.addEventListener('error', () => {
+          toggleLabel.style.display = 'none';
+        });
+        preloadAudio.load();
+      }
+
       button.addEventListener('click', () => {
-        const audioUrl = button.dataset.audio;
         const audio = new Audio(audioUrl);
+        audio.playbackRate = toggle && toggle.checked ? 0.5 : 1;
         audio.play();
       });
     });
