@@ -1,6 +1,64 @@
 const form = document.getElementById('dictionary-form');
 const wordInput = document.getElementById('word-search');
 const resultEl = document.getElementById('result');
+const historyEl = document.getElementById('history');
+const historyListEl = document.getElementById('history-list');
+
+const HISTORY_KEY = 'pronunciationToolHistory';
+const HISTORY_MAX = 10;
+
+function loadHistory() {
+  try {
+    const saved = localStorage.getItem(HISTORY_KEY);
+    return saved ? JSON.parse(saved) : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function saveHistory(history) {
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+}
+
+function renderHistory() {
+  const history = loadHistory();
+
+  if (!history.length) {
+    historyEl.style.display = 'none';
+    historyListEl.innerHTML = '';
+    return;
+  }
+
+  historyEl.style.display = 'block';
+  historyListEl.innerHTML = history.map((word) => `
+      <li><button type="button" class="history-item">${word}</button></li>
+    `).join('');
+
+  document.querySelectorAll('.history-item').forEach((button) => {
+    button.addEventListener('click', () => {
+      searchWord(button.textContent.trim());
+    });
+  });
+}
+
+function addToHistory(word) {
+  const history = loadHistory();
+  const cleanedWord = word.trim();
+  const existingIndex = history.findIndex((item) => item.toLowerCase() === cleanedWord.toLowerCase());
+
+  if (existingIndex !== -1) {
+    history.splice(existingIndex, 1);
+  }
+
+  history.unshift(cleanedWord);
+
+  if (history.length > HISTORY_MAX) {
+    history.length = HISTORY_MAX;
+  }
+
+  saveHistory(history);
+  renderHistory();
+}
 
 function renderPhonetics(phonetics) {
   if (!Array.isArray(phonetics) || phonetics.length === 0) {
@@ -9,19 +67,27 @@ function renderPhonetics(phonetics) {
 
   const phoneticsHtml = phonetics.map((phonetic) => {
     const audioButton = phonetic.audio
-      ? `<div class="audio-control">
-          <button class="play-audio" data-audio="${phonetic.audio}" title="Play audio">🔊</button>
-          <label class="slow-speed-label" style="display:none; margin-top:0.25rem;">
-            <input class="slow-speed-toggle" type="checkbox" /> Play slow (0.5×)
-          </label>
-        </div>`
+      ? `<button type="button" class="play-audio" data-audio="${phonetic.audio}" title="Play audio">🔊</button>`
+      : '';
+    const toggleSwitch = phonetic.audio
+      ? `<label class="slow-speed-label" style="display:none; margin-top:0.5rem; align-items:center; gap:0.5rem;">
+          <span style="font-size:0.9rem;">0.5×</span>
+          <div style="position:relative; width:40px; height:22px; background:#ccc; border-radius:11px; cursor:pointer; transition:background 0.3s;">
+            <input class="slow-speed-toggle" type="checkbox" style="opacity:0; position:absolute; width:0; height:0; cursor:pointer;" />
+            <span style="position:absolute; top:2px; left:2px; width:18px; height:18px; background:white; border-radius:50%; transition:left 0.3s; content:'';" class="toggle-slider"></span>
+          </div>
+        </label>`
       : '';
     return `
       <div class="phonetic-item">
-        ${audioButton}
-        <span class="phonetic-text">${phonetic.text || ''}</span>
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span class="phonetic-text">${phonetic.text || ''}</span>
+          ${audioButton}
+        </div>
+        ${toggleSwitch}
       </div>`;
   }).join('');
+
 
   return `
     <section class="phonetics">
@@ -75,11 +141,57 @@ async function fetchWord(word) {
   return response.json();
 }
 
-form.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  const word = wordInput.value.trim();
+function attachAudioHandlers() {
+  document.querySelectorAll('.play-audio').forEach((button) => {
+    const audioUrl = button.dataset.audio;
+    const phoneticItem = button.closest('.phonetic-item');
+    const toggle = phoneticItem.querySelector('.slow-speed-toggle');
+    const toggleLabel = phoneticItem.querySelector('.slow-speed-label');
 
-  if (!word) {
+    if (toggleLabel) {
+      const preloadAudio = new Audio();
+      preloadAudio.preload = 'auto';
+      preloadAudio.src = audioUrl;
+      preloadAudio.addEventListener('canplaythrough', () => {
+        toggleLabel.style.display = 'inline-flex';
+        updateToggleStyle(toggle, toggleLabel);
+      });
+      preloadAudio.addEventListener('error', () => {
+        toggleLabel.style.display = 'none';
+      });
+      preloadAudio.load();
+
+      toggle.addEventListener('change', () => {
+        updateToggleStyle(toggle, toggleLabel);
+      });
+    }
+
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      const audio = new Audio(audioUrl);
+      audio.playbackRate = toggle && toggle.checked ? 0.5 : 1;
+      audio.play();
+    });
+  });
+}
+
+function updateToggleStyle(toggle, toggleLabel) {
+  const toggleContainer = toggleLabel.querySelector('div');
+  const toggleSlider = toggleLabel.querySelector('.toggle-slider');
+
+  if (toggle.checked) {
+    toggleContainer.style.background = '#4CAF50';
+    toggleSlider.style.left = '20px';
+  } else {
+    toggleContainer.style.background = '#ccc';
+    toggleSlider.style.left = '2px';
+  }
+}
+
+async function searchWord(word) {
+  const trimmedWord = word.trim();
+
+  if (!trimmedWord) {
     showMessage('Please enter a word to search.', true);
     return;
   }
@@ -87,40 +199,23 @@ form.addEventListener('submit', async (event) => {
   showMessage('Searching...');
 
   try {
-    const entries = await fetchWord(word);
+    const entries = await fetchWord(trimmedWord);
     if (!Array.isArray(entries) || entries.length === 0) {
-      showMessage(`No results found for "${word}".`, true);
+      showMessage(`No results found for "${trimmedWord}".`, true);
       return;
     }
 
     resultEl.innerHTML = entries.map(renderDefinition).join('');
-    
-    document.querySelectorAll('.play-audio').forEach(button => {
-      const audioUrl = button.dataset.audio;
-      const audioControl = button.parentElement;
-      const toggle = audioControl.querySelector('.slow-speed-toggle');
-      const toggleLabel = audioControl.querySelector('.slow-speed-label');
-
-      if (toggleLabel) {
-        const preloadAudio = new Audio();
-        preloadAudio.preload = 'auto';
-        preloadAudio.src = audioUrl;
-        preloadAudio.addEventListener('canplaythrough', () => {
-          toggleLabel.style.display = 'inline-flex';
-        });
-        preloadAudio.addEventListener('error', () => {
-          toggleLabel.style.display = 'none';
-        });
-        preloadAudio.load();
-      }
-
-      button.addEventListener('click', () => {
-        const audio = new Audio(audioUrl);
-        audio.playbackRate = toggle && toggle.checked ? 0.5 : 1;
-        audio.play();
-      });
-    });
+    attachAudioHandlers();
+    addToHistory(trimmedWord);
   } catch (error) {
     showMessage(error.message, true);
   }
+}
+
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  await searchWord(wordInput.value);
 });
+
+renderHistory();

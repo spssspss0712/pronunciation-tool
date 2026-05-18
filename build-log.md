@@ -41,7 +41,7 @@
 ## learned today
 
 - Learned that the browser Audio object has a `playbackRate` property.
-- learned how to precisely describe you need
+- learned how to precisely describe you need, here is a template
 
 ```
 I want to add a slow playback option.
@@ -69,3 +69,18 @@ Please make the smallest possible code change.
 
 - implement the search history feature
 - adjust the location of slow play toggle swich
+
+## Day 5
+
+- add search history feature
+- learned how to use localStorage
+
+## Next
+
+- adjust the location of slow play toggle swich
+- slow play using toggle swich instead of checkbox
+
+## Day 6
+
+- slow play using toggle swich
+- phonetic text and audio button in one line, and the slow play in the line below
