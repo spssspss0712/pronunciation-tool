@@ -4,6 +4,115 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pronunciation Tool</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        margin: 1.5rem;
+        color: #1f2937;
+        background: #f8fafc;
+      }
+      form {
+        margin-bottom: 1.5rem;
+      }
+      .phonetics {
+        border: 1px solid #e5e7eb;
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 1rem;
+      }
+      .phonetic-item {
+        display: grid;
+        grid-template-columns: 1fr 160px;
+        gap: 1rem;
+        align-items: start;
+        padding: 0.85rem 0;
+        border-bottom: 1px solid #f3f4f6;
+      }
+      .phonetic-item:last-child {
+        border-bottom: none;
+      }
+      .phonetic-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .phonetic-main {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+      .phonetic-text {
+        font-size: 1.4rem;
+        font-weight: 700;
+      }
+      button.play-audio {
+        padding: 0.55rem 0.85rem;
+        border: none;
+        border-radius: 12px;
+        background: #eef2ff;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+      button.play-audio:hover {
+        background: #dde6ff;
+      }
+      .slow-speed-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.95rem;
+      }
+      .slow-speed-label span {
+        color: #374151;
+      }
+      .mouth-shape {
+        justify-self: center;
+      }
+      .mouth-figure {
+        width: 96px;
+        height: 96px;
+        background: #eff6ff;
+        border-radius: 22px;
+        display: grid;
+        place-items: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .mouth-figure::before {
+        content: '';
+        position: absolute;
+        width: 52px;
+        height: 24px;
+        border-radius: 120px / 70px;
+        border: 3px solid #2563eb;
+        top: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .mouth-figure .upper,
+      .mouth-figure .lower {
+        position: absolute;
+        left: 50%;
+        width: 56px;
+        height: 6px;
+        background: #1d4ed8;
+        border-radius: 999px;
+        transform: translateX(-50%);
+      }
+      .mouth-figure .upper {
+        top: 28px;
+      }
+      .mouth-figure .lower {
+        top: 44px;
+      }
+      .mouth-frame-1 .upper { top: 24px; width: 70px; }
+      .mouth-frame-1 .lower { top: 48px; width: 70px; }
+      .mouth-frame-2 .upper { top: 22px; width: 82px; }
+      .mouth-frame-2 .lower { top: 50px; width: 82px; }
+      .mouth-frame-3 .upper { top: 20px; width: 92px; }
+      .mouth-frame-3 .lower { top: 54px; width: 92px; }
+    </style>
 </head>
 <body>
     <form id="dictionary-form">

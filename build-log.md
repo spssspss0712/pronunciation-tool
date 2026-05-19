@@ -109,3 +109,17 @@ Only add search history functionality.
 ## Next
 
 - add mouth gif to show how to pronouce
+
+## Day 7
+
+- add mouth shape feature
+- there are three different ways to implement, chose the quick and simply way
+
+## learnd today
+
+- using only if
+- using do not modify exist function/feature to limit the AI change region
+
+## Next
+
+- update the mouth shape image/match words

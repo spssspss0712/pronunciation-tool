@@ -70,24 +70,35 @@ function renderPhonetics(phonetics) {
       ? `<button type="button" class="play-audio" data-audio="${phonetic.audio}" title="Play audio">🔊</button>`
       : '';
     const toggleSwitch = phonetic.audio
-      ? `<label class="slow-speed-label" style="display:none; margin-top:0.5rem; align-items:center; gap:0.5rem;">
+      ? `<label class="slow-speed-label" style="display:none; align-items:center; gap:0.5rem;">
           <span style="font-size:0.9rem;">0.5×</span>
           <div style="position:relative; width:40px; height:22px; background:#ccc; border-radius:11px; cursor:pointer; transition:background 0.3s;">
             <input class="slow-speed-toggle" type="checkbox" style="opacity:0; position:absolute; width:0; height:0; cursor:pointer;" />
-            <span style="position:absolute; top:2px; left:2px; width:18px; height:18px; background:white; border-radius:50%; transition:left 0.3s; content:'';" class="toggle-slider"></span>
+            <span style="position:absolute; top:2px; left:2px; width:18px; height:18px; background:white; border-radius:50%; transition:left 0.3s;" class="toggle-slider"></span>
           </div>
         </label>`
       : '';
+    const mouthBlock = phonetic.audio
+      ? `<div class="mouth-shape" aria-hidden="true">
+          <div class="mouth-figure mouth-frame-0">
+            <div class="upper"></div>
+            <div class="lower"></div>
+          </div>
+        </div>`
+      : '';
+
     return `
       <div class="phonetic-item">
-        <div style="display:flex; align-items:center; gap:0.5rem;">
-          <span class="phonetic-text">${phonetic.text || ''}</span>
-          ${audioButton}
+        <div class="phonetic-content">
+          <div class="phonetic-main">
+            <span class="phonetic-text">${phonetic.text || ''}</span>
+            ${audioButton}
+          </div>
+          ${toggleSwitch}
         </div>
-        ${toggleSwitch}
+        ${mouthBlock}
       </div>`;
   }).join('');
-
 
   return `
     <section class="phonetics">
@@ -169,7 +180,42 @@ function attachAudioHandlers() {
     button.addEventListener('click', (event) => {
       event.preventDefault();
       const audio = new Audio(audioUrl);
+      const mouthFigure = phoneticItem.querySelector('.mouth-figure');
+      const mouthStates = ['mouth-frame-0', 'mouth-frame-1', 'mouth-frame-2', 'mouth-frame-3'];
+
+      const updateMouthState = () => {
+        if (!mouthFigure || !audio.duration || isNaN(audio.duration)) return;
+        const ratio = Math.min(1, Math.max(0, audio.currentTime / audio.duration));
+        const frameIndex = Math.floor(ratio * mouthStates.length) % mouthStates.length;
+        mouthStates.forEach((state) => mouthFigure.classList.remove(state));
+        mouthFigure.classList.add(mouthStates[frameIndex]);
+      };
+
       audio.playbackRate = toggle && toggle.checked ? 0.5 : 1;
+
+      audio.addEventListener('play', () => {
+        if (mouthFigure) {
+          mouthFigure.classList.add('speaking');
+        }
+      });
+
+      audio.addEventListener('pause', () => {
+        if (mouthFigure) {
+          mouthFigure.classList.remove('speaking');
+          mouthStates.forEach((state) => mouthFigure.classList.remove(state));
+          mouthFigure.classList.add('mouth-frame-0');
+        }
+      });
+
+      audio.addEventListener('ended', () => {
+        if (mouthFigure) {
+          mouthFigure.classList.remove('speaking');
+          mouthStates.forEach((state) => mouthFigure.classList.remove(state));
+          mouthFigure.classList.add('mouth-frame-0');
+        }
+      });
+
+      audio.addEventListener('timeupdate', updateMouthState);
       audio.play();
     });
   });
