@@ -84,3 +84,28 @@ Please make the smallest possible code change.
 
 - slow play using toggle swich
 - phonetic text and audio button in one line, and the slow play in the line below
+
+## learned today
+
+- how to interactive with AI agent
+- commit immediatly after finish a feature, so you can rollback when AI messed up
+- ask agent do not modify existing functions, especially after you write/modified code manually.
+- example:
+
+```
+Do not modify existing playback speed behavior.
+Keep the current 0.5x implementation unchanged.
+Only add search history functionality.
+```
+
+- write note or comments to share intetional decisions with AI and others
+- using feature brachs in the future
+
+## Intentional Decisions
+
+- Slow playback fixed at 0.5x
+- Slow toggle only appears when audio exists
+
+## Next
+
+- add mouth gif to show how to pronouce
