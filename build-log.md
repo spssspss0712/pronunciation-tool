@@ -112,8 +112,10 @@ Only add search history functionality.
 
 ## Day 7
 
-- add mouth shape feature
-- there are three different ways to implement, chose the quick and simply way
+- Added a mouth-shape visual cue for pronunciation playback.
+- Used constraints when prompting AI: keep existing features unchanged and follow a Google Pronounce-inspired layout.
+- Chose the simplest implementation first: one shared mouth animation for all words with audio.
+- Learned to ask AI to compare implementation difficulty before choosing a feature scope.
 
 ## learnd today
 
@@ -122,4 +124,14 @@ Only add search history functionality.
 
 ## Next
 
-- update the mouth shape image/match words
+- Improve mouth animation states: idle, playing, and stopped.
+
+## Day 8
+
+- try to optimize the mouth shape to more human-looking image, failed
+- try to use different prompt the generate the image/gif, failed
+- tied upload a human face simple line image, but ai can not make it gif,move
+
+## Next
+
+- think about different way to achive the goal
