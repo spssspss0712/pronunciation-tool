@@ -135,3 +135,16 @@ Only add search history functionality.
 ## Next
 
 - think about different way to achive the goal
+
+## Day 9
+
+- using 3 png images show the mouth close, half-open, open status, by switching images, it looks like a mouth pronounce a word animation.
+
+## learned today
+
+- AI is more powerful at logic/integration/control process, but not good at image/svg/gif generate right now.
+- find the icon or design online or create by yourself, and let AI use it is the easiest way of implimetetion.
+
+## Next
+
+- history location adjustment
