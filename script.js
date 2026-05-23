@@ -1,8 +1,31 @@
 const form = document.getElementById('dictionary-form');
 const wordInput = document.getElementById('word-search');
 const resultEl = document.getElementById('result');
-const historyEl = document.getElementById('history');
-const historyListEl = document.getElementById('history-list');
+
+// Dropdown UI (created dynamically so we don't change existing HTML structure)
+const historyDropdown = document.createElement('div');
+historyDropdown.id = 'history-dropdown';
+historyDropdown.style.position = 'absolute';
+historyDropdown.style.zIndex = '1000';
+historyDropdown.style.display = 'none';
+historyDropdown.style.background = 'white';
+historyDropdown.style.border = '1px solid #ccc';
+historyDropdown.style.borderRadius = '4px';
+historyDropdown.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
+historyDropdown.style.maxHeight = '220px';
+historyDropdown.style.overflowY = 'auto';
+historyDropdown.style.minWidth = '180px';
+historyDropdown.style.padding = '4px 0';
+
+const historyDropdownList = document.createElement('ul');
+historyDropdownList.style.listStyle = 'none';
+historyDropdownList.style.margin = '0';
+historyDropdownList.style.padding = '0';
+historyDropdown.appendChild(historyDropdownList);
+
+// insert dropdown into the form so absolute positioning is relative to the form
+form.style.position = form.style.position || 'relative';
+form.appendChild(historyDropdown);
 
 const HISTORY_KEY = 'pronunciationToolHistory';
 const HISTORY_MAX = 10;
@@ -20,26 +43,67 @@ function saveHistory(history) {
   localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
 }
 
-function renderHistory() {
-  const history = loadHistory();
 
-  if (!history.length) {
-    historyEl.style.display = 'none';
-    historyListEl.innerHTML = '';
+
+function renderDropdown() {
+  const history = loadHistory();
+  // Use the same ordering and cap as the main history logic (most recent first)
+  if (!history || history.length === 0) {
+    historyDropdown.style.display = 'none';
+    historyDropdownList.innerHTML = '';
     return;
   }
 
-  historyEl.style.display = 'block';
-  historyListEl.innerHTML = history.map((word) => `
-      <li><button type="button" class="history-item">${word}</button></li>
-    `).join('');
+  historyDropdownList.innerHTML = history.slice(0, HISTORY_MAX).map(word => `\n    <li style="padding:6px 12px; cursor:pointer;">${word}</li>`).join('');
 
-  document.querySelectorAll('.history-item').forEach((button) => {
-    button.addEventListener('click', () => {
-      searchWord(button.textContent.trim());
+  // attach click handlers
+  Array.from(historyDropdownList.children).forEach((li) => {
+    li.addEventListener('click', (e) => {
+      const w = e.currentTarget.textContent.trim();
+      hideDropdown();
+      searchWord(w);
+    });
+    li.addEventListener('mousedown', (e) => {
+      // prevent blur on input in some browsers
+      e.preventDefault();
     });
   });
+
+  // position dropdown under the input
+  const rect = wordInput.getBoundingClientRect();
+  const formRect = form.getBoundingClientRect();
+  const left = rect.left - formRect.left;
+  const top = rect.bottom - formRect.top + 4;
+  historyDropdown.style.left = `${left}px`;
+  historyDropdown.style.top = `${top}px`;
+  historyDropdown.style.minWidth = `${rect.width}px`;
+  historyDropdown.style.display = 'block';
 }
+
+function showDropdown() {
+  renderDropdown();
+}
+
+function hideDropdown() {
+  historyDropdown.style.display = 'none';
+}
+
+// Show dropdown on input focus/click if there is history
+wordInput.addEventListener('focus', () => {
+  const history = loadHistory();
+  if (history && history.length) showDropdown();
+});
+wordInput.addEventListener('click', () => {
+  const history = loadHistory();
+  if (history && history.length) showDropdown();
+});
+
+// Hide dropdown when clicking outside input/dropdown
+document.addEventListener('click', (e) => {
+  if (e.target === wordInput) return;
+  if (historyDropdown.contains(e.target)) return;
+  hideDropdown();
+});
 
 function addToHistory(word) {
   const history = loadHistory();
@@ -57,7 +121,7 @@ function addToHistory(word) {
   }
 
   saveHistory(history);
-  renderHistory();
+  renderDropdown();
 }
 
 function renderPhonetics(phonetics) {
@@ -263,5 +327,3 @@ form.addEventListener('submit', async (event) => {
   event.preventDefault();
   await searchWord(wordInput.value);
 });
-
-renderHistory();

@@ -148,3 +148,14 @@ Only add search history functionality.
 ## Next
 
 - history location adjustment
+
+## Day 10
+
+- move search history to the pull-down menu,and keep the previous logic
+- fix the previous search history feature still exist problem
+
+## Next
+
+- accept voice input by spelling the letters
+- add example sentence audio
+- add word's meaning in chinese
