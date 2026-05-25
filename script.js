@@ -306,6 +306,7 @@ async function searchWord(word) {
     return;
   }
 
+  wordInput.value = trimmedWord;
   showMessage('Searching...');
 
   try {
