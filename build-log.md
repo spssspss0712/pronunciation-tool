@@ -156,6 +156,17 @@ Only add search history functionality.
 
 ## Next
 
+- plans:
+  -- accept voice input by spelling the letters
+  -- add example sentence audio
+  -- add word's meaning in chinese
+
+## Day 11/ Day 12
+
+- fix pull-down menu is not hidden bug
+- fix click history word, the word show in the input box is not current word
+- modified the search button to a search icon
+
+## Next
+
 - accept voice input by spelling the letters
-- add example sentence audio
-- add word's meaning in chinese
