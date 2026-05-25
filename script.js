@@ -318,6 +318,7 @@ async function searchWord(word) {
     resultEl.innerHTML = entries.map(renderDefinition).join('');
     attachAudioHandlers();
     addToHistory(trimmedWord);
+    hideDropdown();
   } catch (error) {
     showMessage(error.message, true);
   }
@@ -325,5 +326,6 @@ async function searchWord(word) {
 
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
+  hideDropdown();
   await searchWord(wordInput.value);
 });
