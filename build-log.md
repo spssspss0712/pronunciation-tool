@@ -163,9 +163,12 @@ Only add search history functionality.
 
 ## Day 11/ Day 12
 
-- fix pull-down menu is not hidden bug
+- Updated the search button to a magnifying glass icon.
+- Found a bug where the history dropdown stayed open after a successful search.
+- After several failed fixes, rolled back and discovered the bug existed before the search button change.
+- Fixed the history dropdown behavior first, then reapplied the search icon change.
+- Learned that bugs exposed by a new feature may actually come from previous logic.
 - fix click history word, the word show in the input box is not current word
-- modified the search button to a search icon
 
 ## Next
 
