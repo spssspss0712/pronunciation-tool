@@ -14,6 +14,49 @@
       form {
         margin-bottom: 1.5rem;
       }
+      .search-field {
+        position: relative;
+        width: 100%;
+        max-width: 480px;
+      }
+      #word-search {
+        width: 100%;
+        padding: 0.75rem 3rem 0.75rem 0.9rem;
+        border: 1px solid #d1d5db;
+        border-radius: 9999px;
+        font-size: 1rem;
+        line-height: 1.5;
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+      #word-search:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+      }
+      .search-button {
+        position: absolute;
+        top: 50%;
+        right: 0.5rem;
+        transform: translateY(-50%);
+        border: none;
+        background: transparent;
+        color: #4b5563;
+        cursor: pointer;
+        width: 2.2rem;
+        height: 2.2rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        border-radius: 9999px;
+      }
+      .search-button:hover {
+        background: rgba(15, 23, 42, 0.06);
+      }
+      .search-button:focus-visible {
+        outline: 2px solid #6366f1;
+        outline-offset: 2px;
+      }
       .phonetics {
         border: 1px solid #e5e7eb;
         background: #ffffff;
@@ -100,8 +143,10 @@
 <body>
     <form id="dictionary-form">
         <label for="word-search">Enter an English word:</label>
-        <input id="word-search" type="search" name="word" placeholder="Type or paste a word" autocomplete="off" />
-        <button type="submit">Search</button>
+        <div class="search-field">
+          <input id="word-search" type="search" name="word" placeholder="Type or paste a word" autocomplete="off" />
+          <button type="submit" class="search-button" aria-label="Search">🔍</button>
+        </div>
     </form>
     
     <div id="result"></div>
