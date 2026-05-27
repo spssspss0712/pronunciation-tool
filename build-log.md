@@ -173,3 +173,13 @@ Only add search history functionality.
 ## Next
 
 - accept voice input by spelling the letters
+
+## Day 13
+
+- add the voice input feature
+- now can accept audio words not letters
+
+## Next
+
+- fix the bug of only get words not letters
+- add example sentence audio

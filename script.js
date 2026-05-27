@@ -1,6 +1,161 @@
 const form = document.getElementById('dictionary-form');
 const wordInput = document.getElementById('word-search');
 const resultEl = document.getElementById('result');
+const voiceButton = document.querySelector('.voice-button');
+const voiceOverlay = document.querySelector('.voice-overlay');
+const voiceWave = voiceOverlay?.querySelector('.voice-wave');
+const voiceStatus = voiceOverlay?.querySelector('.voice-status');
+
+let recognition = null;
+let voiceTimeoutId = null;
+
+function showVoiceOverlay(active) {
+  if (!voiceOverlay) return;
+  voiceOverlay.classList.toggle('active', active);
+  if (voiceButton) voiceButton.classList.toggle('active', active);
+}
+
+function updateVoiceWave(active) {
+  if (!voiceWave) return;
+  voiceWave.classList.toggle('active', active);
+}
+
+function setVoiceStatus(text) {
+  if (!voiceStatus) return;
+  voiceStatus.textContent = text;
+}
+
+function cleanVoiceTranscript(transcript) {
+  const cleaned = transcript.trim().split(/\s+/)[0] || '';
+  return cleaned.replace(/[^A-Za-z]/g, '').toLowerCase();
+}
+
+function fillInputAsTyped(word) {
+  if (!word) return;
+  wordInput.value = '';
+  wordInput.focus();
+  let index = 0;
+  const typed = setInterval(() => {
+    index += 1;
+    wordInput.value = word.slice(0, index);
+    if (index >= word.length) {
+      clearInterval(typed);
+    }
+  }, 60);
+}
+
+function createRecognition() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) return null;
+
+  const instance = new SpeechRecognition();
+  instance.lang = 'en-US';
+  instance.interimResults = true;
+  instance.maxAlternatives = 1;
+  instance.continuous = false;
+  return instance;
+}
+
+function stopVoiceListening() {
+  if (voiceTimeoutId) {
+    clearTimeout(voiceTimeoutId);
+    voiceTimeoutId = null;
+  }
+
+  if (recognition) {
+    recognition.stop();
+    recognition = null;
+  }
+
+  updateVoiceWave(false);
+  showVoiceOverlay(false);
+}
+
+function startVoiceListening() {
+  if (!voiceButton || !voiceOverlay) return;
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    showMessage('Voice search is not supported by this browser.');
+    return;
+  }
+
+  recognition = createRecognition();
+  if (!recognition) {
+    showMessage('Voice search is not supported by this browser.');
+    return;
+  }
+
+  recognition.addEventListener('start', () => {
+    showVoiceOverlay(true);
+    setVoiceStatus('Listening…');
+    updateVoiceWave(false);
+    voiceTimeoutId = window.setTimeout(() => {
+      recognition?.stop();
+    }, 5000);
+  });
+
+  recognition.addEventListener('speechstart', () => {
+    if (voiceTimeoutId) {
+      clearTimeout(voiceTimeoutId);
+      voiceTimeoutId = null;
+    }
+    updateVoiceWave(true);
+    setVoiceStatus('Listening…');
+  });
+
+  recognition.addEventListener('result', (event) => {
+    let transcript = '';
+    for (let i = event.resultIndex; i < event.results.length; i += 1) {
+      transcript += event.results[i][0].transcript;
+    }
+
+    if (event.results[0].isFinal) {
+      const cleaned = cleanVoiceTranscript(transcript);
+      if (cleaned) {
+        fillInputAsTyped(cleaned);
+      }
+      stopVoiceListening();
+    } else {
+      wordInput.value = transcript.trim();
+    }
+  });
+
+  recognition.addEventListener('speechend', () => {
+    if (voiceTimeoutId) {
+      clearTimeout(voiceTimeoutId);
+      voiceTimeoutId = null;
+    }
+    recognition?.stop();
+  });
+
+  recognition.addEventListener('end', () => {
+    stopVoiceListening();
+  });
+
+  recognition.addEventListener('error', () => {
+    stopVoiceListening();
+    showMessage('Voice search could not start. Please try again.');
+  });
+
+  try {
+    recognition.start();
+  } catch (error) {
+    stopVoiceListening();
+    showMessage('Voice search could not start. Please try again.');
+  }
+}
+
+if (voiceButton) {
+  voiceButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    if (voiceOverlay?.classList.contains('active')) {
+      stopVoiceListening();
+      return;
+    }
+    startVoiceListening();
+  });
+}
 
 // Dropdown UI (created dynamically so we don't change existing HTML structure)
 const historyDropdown = document.createElement('div');

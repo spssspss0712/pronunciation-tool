@@ -21,7 +21,7 @@
       }
       #word-search {
         width: 100%;
-        padding: 0.75rem 3rem 0.75rem 0.9rem;
+        padding: 0.75rem 5rem 0.75rem 0.9rem;
         border: 1px solid #d1d5db;
         border-radius: 9999px;
         font-size: 1rem;
@@ -33,10 +33,10 @@
         border-color: #6366f1;
         box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
       }
+      .voice-button,
       .search-button {
         position: absolute;
         top: 50%;
-        right: 0.5rem;
         transform: translateY(-50%);
         border: none;
         background: transparent;
@@ -50,13 +50,71 @@
         font-size: 1.1rem;
         border-radius: 9999px;
       }
+      .voice-button {
+        right: 2.8rem;
+      }
+      .search-button {
+        right: 0.5rem;
+      }
+      .voice-button:hover,
       .search-button:hover {
         background: rgba(15, 23, 42, 0.06);
       }
+      .voice-button:focus-visible,
       .search-button:focus-visible {
         outline: 2px solid #6366f1;
         outline-offset: 2px;
       }
+      .voice-overlay {
+        position: absolute;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.92);
+        border-radius: 9999px;
+        pointer-events: none;
+      }
+      .voice-overlay.active {
+        display: flex;
+      }
+      .voice-overlay-box {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.5rem 0.85rem;
+        background: rgba(255, 255, 255, 0.96);
+        border: 1px solid #cbd5e1;
+        border-radius: 9999px;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+      }
+      .voice-overlay .voice-icon {
+        font-size: 1.2rem;
+      }
+      .voice-status {
+        font-size: 0.95rem;
+        color: #334155;
+      }
+      .voice-wave {
+        display: inline-flex;
+        gap: 0.25rem;
+        align-items: flex-end;
+        height: 1rem;
+      }
+      .voice-wave span {
+        width: 0.2rem;
+        height: 0.25rem;
+        background: #6366f1;
+        border-radius: 9999px;
+        opacity: 0.2;
+        transform-origin: bottom;
+        transition: height 0.2s ease, opacity 0.2s ease;
+      }
+      .voice-wave.active span:nth-child(1) { height: 0.6rem; opacity: 1; }
+      .voice-wave.active span:nth-child(2) { height: 0.95rem; opacity: 1; }
+      .voice-wave.active span:nth-child(3) { height: 0.7rem; opacity: 1; }
+      .voice-wave.active span:nth-child(4) { height: 1rem; opacity: 1; }
+      .voice-wave.active span:nth-child(5) { height: 0.8rem; opacity: 1; }
       .phonetics {
         border: 1px solid #e5e7eb;
         background: #ffffff;
@@ -145,7 +203,17 @@
         <label for="word-search">Enter an English word:</label>
         <div class="search-field">
           <input id="word-search" type="search" name="word" placeholder="Type or paste a word" autocomplete="off" />
+          <button type="button" class="voice-button" aria-label="Voice search">🎤</button>
           <button type="submit" class="search-button" aria-label="Search">🔍</button>
+          <div class="voice-overlay" aria-hidden="true">
+            <div class="voice-overlay-box">
+              <span class="voice-icon">🎙️</span>
+              <span class="voice-status">Listening…</span>
+              <span class="voice-wave" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span>
+              </span>
+            </div>
+          </div>
         </div>
     </form>
     
