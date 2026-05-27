@@ -30,6 +30,49 @@ function cleanVoiceTranscript(transcript) {
   return cleaned.replace(/[^A-Za-z]/g, '').toLowerCase();
 }
 
+function extractLettersFromTranscript(transcript) {
+  const letterMap = {
+    'a': 'a', 'ay': 'a', 'eh': 'a',
+    'b': 'b', 'bee': 'b',
+    'c': 'c', 'see': 'c', 'cee': 'c',
+    'd': 'd', 'dee': 'd',
+    'e': 'e', 'ee': 'e',
+    'f': 'f', 'ef': 'f', 'eff': 'f',
+    'g': 'g', 'gee': 'g', 'jee': 'g',
+    'h': 'h', 'aitch': 'h', 'haitch': 'h',
+    'i': 'i', 'eye': 'i', 'aye': 'i',
+    'j': 'j', 'jay': 'j',
+    'k': 'k', 'kay': 'k',
+    'l': 'l', 'el': 'l', 'ell': 'l',
+    'm': 'm', 'em': 'm',
+    'n': 'n', 'en': 'n',
+    'o': 'o', 'oh': 'o', 'owe': 'o',
+    'p': 'p', 'pee': 'p', 'pea': 'p',
+    'q': 'q', 'queue': 'q', 'cue': 'q', 'cu': 'q',
+    'r': 'r', 'are': 'r', 'arr': 'r',
+    's': 's', 'ess': 's',
+    't': 't', 'tee': 't', 'tea': 't',
+    'u': 'u', 'you': 'u', 'ewe': 'u',
+    'v': 'v', 'vee': 'v',
+    'w': 'w', 'double-u': 'w', 'doubleyou': 'w', 'double you': 'w',
+    'x': 'x', 'ex': 'x',
+    'y': 'y', 'why': 'y', 'wye': 'y',
+    'z': 'z', 'zee': 'z', 'zed': 'z', 'zedd': 'z'
+  };
+
+  const cleaned = transcript.trim().toLowerCase();
+  const words = cleaned.split(/[\s,\-\.]+/).filter(w => w.length > 0);
+  
+  let result = '';
+  for (const word of words) {
+    if (letterMap[word]) {
+      result += letterMap[word];
+    }
+  }
+  
+  return result;
+}
+
 function fillInputAsTyped(word) {
   if (!word) return;
   wordInput.value = '';
@@ -52,7 +95,7 @@ function createRecognition() {
   instance.lang = 'en-US';
   instance.interimResults = true;
   instance.maxAlternatives = 1;
-  instance.continuous = false;
+  instance.continuous = true;
   return instance;
 }
 
@@ -86,38 +129,55 @@ function startVoiceListening() {
     return;
   }
 
+  let accumulatedLetters = '';
+  let lastSpeechTime = Date.now();
+  let silenceCheckId = null;
+
+  const checkSilence = () => {
+    const now = Date.now();
+    if (now - lastSpeechTime > 3000) {
+      recognition?.stop();
+      clearInterval(silenceCheckId);
+    }
+  };
+
   recognition.addEventListener('start', () => {
     showVoiceOverlay(true);
     setVoiceStatus('Listening…');
     updateVoiceWave(false);
+    accumulatedLetters = '';
+    lastSpeechTime = Date.now();
+    
+    silenceCheckId = setInterval(checkSilence, 200);
+    
     voiceTimeoutId = window.setTimeout(() => {
       recognition?.stop();
-    }, 5000);
+      if (silenceCheckId) clearInterval(silenceCheckId);
+    }, 10000);
   });
 
   recognition.addEventListener('speechstart', () => {
-    if (voiceTimeoutId) {
-      clearTimeout(voiceTimeoutId);
-      voiceTimeoutId = null;
-    }
     updateVoiceWave(true);
     setVoiceStatus('Listening…');
   });
 
   recognition.addEventListener('result', (event) => {
+    lastSpeechTime = Date.now();
+    
     let transcript = '';
     for (let i = event.resultIndex; i < event.results.length; i += 1) {
-      transcript += event.results[i][0].transcript;
+      if (event.results[i].isFinal) {
+        transcript += event.results[i][0].transcript + ' ';
+      }
     }
 
-    if (event.results[0].isFinal) {
-      const cleaned = cleanVoiceTranscript(transcript);
-      if (cleaned) {
-        fillInputAsTyped(cleaned);
-      }
-      stopVoiceListening();
-    } else {
-      wordInput.value = transcript.trim();
+    const newLetters = extractLettersFromTranscript(transcript);
+    accumulatedLetters += newLetters;
+    
+    wordInput.value = accumulatedLetters;
+
+    if (event.results[event.results.length - 1].isFinal) {
+      updateVoiceWave(false);
     }
   });
 
@@ -126,14 +186,32 @@ function startVoiceListening() {
       clearTimeout(voiceTimeoutId);
       voiceTimeoutId = null;
     }
+    if (silenceCheckId) {
+      clearInterval(silenceCheckId);
+      silenceCheckId = null;
+    }
     recognition?.stop();
   });
 
   recognition.addEventListener('end', () => {
+    if (silenceCheckId) {
+      clearInterval(silenceCheckId);
+      silenceCheckId = null;
+    }
+    
+    if (accumulatedLetters) {
+      wordInput.value = '';
+      fillInputAsTyped(accumulatedLetters);
+    }
+    
     stopVoiceListening();
   });
 
   recognition.addEventListener('error', () => {
+    if (silenceCheckId) {
+      clearInterval(silenceCheckId);
+      silenceCheckId = null;
+    }
     stopVoiceListening();
     showMessage('Voice search could not start. Please try again.');
   });
@@ -141,6 +219,10 @@ function startVoiceListening() {
   try {
     recognition.start();
   } catch (error) {
+    if (silenceCheckId) {
+      clearInterval(silenceCheckId);
+      silenceCheckId = null;
+    }
     stopVoiceListening();
     showMessage('Voice search could not start. Please try again.');
   }
