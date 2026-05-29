@@ -183,3 +183,21 @@ Only add search history functionality.
 
 - fix the bug of only get words not letters
 - add example sentence audio
+
+## Day 14
+
+- fix the listening voice bug, now can listening to letters instead of word
+- free usage of github copilot reach the limit
+
+## Next
+
+- fix the AI agent can not use problem
+
+## Day 15
+
+- Hit the GitHub Copilot free usage limit and found that new Copilot Pro sign-ups are currently paused.
+- Started evaluating alternative AI coding workflows to avoid dependency on one tool.
+
+## Next
+
+- install Continue.dev or Cline instead of copilot
