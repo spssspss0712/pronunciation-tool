@@ -132,6 +132,32 @@
       .phonetic-item:last-child {
         border-bottom: none;
       }
+      .example {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 0.4rem 0;
+      }
+      .example button.play-sentence {
+        border: none;
+        background: transparent;
+        color: #4b5563;
+        cursor: pointer;
+        padding: 0.2rem 0.35rem;
+        font-size: 1rem;
+        border-radius: 9999px;
+      }
+      .example button.play-sentence:hover {
+        background: rgba(15, 23, 42, 0.06);
+      }
+      .example button.play-sentence:focus-visible {
+        outline: 2px solid #6366f1;
+        outline-offset: 2px;
+      }
+      .example-text {
+        flex: 1;
+        line-height: 1.5;
+      }
       .phonetic-content {
         display: flex;
         flex-direction: column;

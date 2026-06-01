@@ -411,7 +411,12 @@ function renderPhonetics(phonetics) {
 function renderDefinition(entry) {
   const meaningsHtml = entry.meanings.map((meaning) => {
     const defs = meaning.definitions.map((def) => {
-      const example = def.example ? `<div class="example">Example: ${def.example}</div>` : '';
+      const example = def.example
+        ? `<div class="example">
+             <button type="button" class="play-sentence" aria-label="Play example sentence">🔊</button>
+             <span class="example-text">Example: <span class="example-sentence">${def.example}</span></span>
+           </div>`
+        : '';
       return `
         <div class="definition-item">
           <div class="definition-text">${def.definition}</div>
@@ -522,6 +527,26 @@ function attachAudioHandlers() {
   });
 }
 
+function speakSentence(sentence) {
+  if (!sentence || !window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(sentence);
+  utterance.rate = 1;
+  window.speechSynthesis.speak(utterance);
+}
+
+function attachSentenceAudioHandlers() {
+  document.querySelectorAll('.play-sentence').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      const sentenceSpan = button.closest('.example')?.querySelector('.example-sentence');
+      const sentence = sentenceSpan?.textContent?.trim();
+      speakSentence(sentence);
+    });
+  });
+}
+
 function updateToggleStyle(toggle, toggleLabel) {
   const toggleContainer = toggleLabel.querySelector('div');
   const toggleSlider = toggleLabel.querySelector('.toggle-slider');
@@ -555,6 +580,7 @@ async function searchWord(word) {
 
     resultEl.innerHTML = entries.map(renderDefinition).join('');
     attachAudioHandlers();
+    attachSentenceAudioHandlers();
     addToHistory(trimmedWord);
     hideDropdown();
   } catch (error) {

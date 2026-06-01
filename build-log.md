@@ -212,3 +212,10 @@ Only add search history functionality.
 ## Next
 
 - add example sentence audio
+
+## Day 17
+
+- tried Cline using chatgpt-5.5model, add the example playback function
+- after the gpt model modified the code, word search speed slow down, the word playback become super slow, sometimes even played after 1 minutes of clicking the play button
+- Rolled back of the modification of code by gpt
+- reuse copilot did the same feature, accomplish the feature as expected
