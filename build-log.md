@@ -219,3 +219,7 @@ Only add search history functionality.
 - after the gpt model modified the code, word search speed slow down, the word playback become super slow, sometimes even played after 1 minutes of clicking the play button
 - Rolled back of the modification of code by gpt
 - reuse copilot did the same feature, accomplish the feature as expected
+
+## Next
+
+- test and adjust the mobile phone adaptation
