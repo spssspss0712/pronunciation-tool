@@ -223,3 +223,17 @@ Only add search history functionality.
 ## Next
 
 - test and adjust the mobile phone adaptation
+
+## Product / Engineering Decision
+
+- Word search and word audio playback must remain fast.
+- New features such as example sentence audio should not block or delay the main pronunciation result.
+- If an AI-generated change affects existing core interactions, rollback and re-implement with a smaller scope.
+
+## Day 18
+
+- update input box hint to a shorter sentence
+
+## Next
+
+- mobile-friendly adjustment
