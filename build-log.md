@@ -157,7 +157,7 @@ Only add search history functionality.
 ## Next
 
 - plans:
-  -- accept voice input by spelling the letters
+  -- accept voice input by spelling the letters (Done)
   -- add example sentence audio
   -- add word's meaning in chinese
 
@@ -201,3 +201,14 @@ Only add search history functionality.
 ## Next
 
 - install Continue.dev or Cline instead of copilot
+
+## Day 16
+
+- installed cline, but don't know how to use
+- copilot credit restored because it is June 1st now
+- using copilot again
+- update the hint in the input box to let people know the audio input
+
+## Next
+
+- add example sentence audio
