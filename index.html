@@ -5,19 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pronunciation Tool</title>
     <style>
+      html {
+        box-sizing: border-box;
+      }
+      *, *::before, *::after {
+        box-sizing: inherit;
+      }
       body {
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        margin: 1.5rem;
+        margin: 0;
+        padding: 1rem;
+        min-height: 100vh;
         color: #1f2937;
         background: #f8fafc;
+        display: flex;
+        justify-content: center;
+      }
+      .app-container {
+        width: 100%;
+        max-width: 760px;
+        padding: 0 0.75rem;
       }
       form {
         margin-bottom: 1.5rem;
       }
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
       .search-field {
         position: relative;
         width: 100%;
-        max-width: 480px;
+        max-width: none;
       }
       #word-search {
         width: 100%;
@@ -42,8 +62,10 @@
         background: transparent;
         color: #4b5563;
         cursor: pointer;
-        width: 2.2rem;
-        height: 2.2rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        min-width: 2.5rem;
+        min-height: 2.5rem;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -51,7 +73,7 @@
         border-radius: 9999px;
       }
       .voice-button {
-        right: 2.8rem;
+        right: 3rem;
       }
       .search-button {
         right: 0.5rem;
@@ -135,7 +157,7 @@
       .example {
         display: flex;
         align-items: flex-start;
-        gap: 0.5rem;
+        gap: 0.75rem;
         padding: 0.4rem 0;
       }
       .example button.play-sentence {
@@ -143,9 +165,10 @@
         background: transparent;
         color: #4b5563;
         cursor: pointer;
-        padding: 0.2rem 0.35rem;
+        padding: 0.4rem 0.65rem;
         font-size: 1rem;
         border-radius: 9999px;
+        min-height: 2.75rem;
       }
       .example button.play-sentence:hover {
         background: rgba(15, 23, 42, 0.06);
@@ -196,6 +219,35 @@
       .mouth-shape {
         justify-self: center;
       }
+      button.play-audio,
+      .example button.play-sentence,
+      .search-button,
+      .voice-button {
+        touch-action: manipulation;
+      }
+      @media (max-width: 640px) {
+        body {
+          padding: 0.75rem;
+        }
+        .app-container {
+          padding: 0;
+        }
+        .phonetic-item {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 0.75rem;
+        }
+        .search-field {
+          width: 100%;
+        }
+        #word-search {
+          padding: 0.85rem 5rem 0.85rem 1rem;
+          font-size: 1rem;
+        }
+        .voice-button {
+          right: 3.1rem;
+        }
+      }
       .mouth-figure {
         width: 108px;
         height: 80px;
@@ -225,6 +277,7 @@
     </style>
 </head>
 <body>
+    <div class="app-container">
     <form id="dictionary-form">
         <label for="word-search">Enter an English word:</label>
         <div class="search-field">
@@ -244,6 +297,7 @@
     </form>
     
     <div id="result"></div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>

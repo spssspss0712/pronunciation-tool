@@ -237,3 +237,14 @@ Only add search history functionality.
 ## Next
 
 - mobile-friendly adjustment
+
+## Day 19
+
+- make the app more mobile friendly whitout change all funcitons
+- Found and fixed the problem that "script.js" been added twice
+- Asked AI helped remove all duplication in html
+
+## Next
+
+- add a "x" clear button in phone input box
+- audio input disappear when the browser is not support the audio input function
