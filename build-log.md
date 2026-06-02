@@ -248,3 +248,4 @@ Only add search history functionality.
 
 - add a "x" clear button in phone input box
 - audio input disappear when the browser is not support the audio input function
+- fix the problem that date(Monday, Tuesday...) and month(June, August) are words that can not found. API limitation.
