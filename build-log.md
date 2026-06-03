@@ -249,3 +249,12 @@ Only add search history functionality.
 - add a "x" clear button in phone input box
 - audio input disappear when the browser is not support the audio input function
 - fix the problem that date(Monday, Tuesday...) and month(June, August) are words that can not found. API limitation.
+
+## Day 20
+
+- try 3 times to add a clear button while using mobile device, and failed
+- update audio input button display, while browser does not support audio input, do not show the button
+
+## Next
+
+- add chinese meanings

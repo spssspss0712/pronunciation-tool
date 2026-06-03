@@ -9,6 +9,15 @@ const voiceStatus = voiceOverlay?.querySelector('.voice-status');
 let recognition = null;
 let voiceTimeoutId = null;
 
+// Progressive enhancement: hide voice button if SpeechRecognition is not available
+(() => {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition && voiceButton) {
+    voiceButton.style.display = 'none';
+    voiceButton.setAttribute('aria-hidden', 'true');
+  }
+})();
+
 function showVoiceOverlay(active) {
   if (!voiceOverlay) return;
   voiceOverlay.classList.toggle('active', active);
@@ -213,7 +222,7 @@ function startVoiceListening() {
       silenceCheckId = null;
     }
     stopVoiceListening();
-    showMessage('Voice search could not start. Please try again.');
+    showEphemeralNotice('Voice search could not start. Please try again.');
   });
 
   try {
@@ -224,7 +233,7 @@ function startVoiceListening() {
       silenceCheckId = null;
     }
     stopVoiceListening();
-    showMessage('Voice search could not start. Please try again.');
+    showEphemeralNotice('Voice search could not start. Please try again.');
   }
 }
 
@@ -445,6 +454,37 @@ function renderDefinition(entry) {
 
 function showMessage(message, isError = false) {
   resultEl.innerHTML = `<p class="message ${isError ? 'error' : ''}">${message}</p>`;
+}
+
+// Short, non-blocking ephemeral notice used for voice/start failures
+function showEphemeralNotice(text, timeout = 3000) {
+  if (!form) return;
+  const existing = document.querySelector('.ephemeral-notice');
+  if (existing) existing.remove();
+
+  const notice = document.createElement('div');
+  notice.className = 'ephemeral-notice';
+  notice.setAttribute('role', 'status');
+  notice.setAttribute('aria-live', 'polite');
+  notice.style.position = 'absolute';
+  notice.style.right = '0.5rem';
+  notice.style.top = '100%';
+  notice.style.marginTop = '0.5rem';
+  notice.style.background = 'rgba(0,0,0,0.75)';
+  notice.style.color = 'white';
+  notice.style.padding = '6px 10px';
+  notice.style.borderRadius = '8px';
+  notice.style.fontSize = '0.9rem';
+  notice.style.zIndex = '1200';
+  notice.style.pointerEvents = 'none';
+  notice.textContent = text;
+
+  form.appendChild(notice);
+
+  window.setTimeout(() => {
+    notice.classList.add('fade');
+    notice.remove();
+  }, timeout);
 }
 
 async function fetchWord(word) {
