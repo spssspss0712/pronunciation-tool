@@ -417,6 +417,12 @@ function renderPhonetics(phonetics) {
     </section>`;
 }
 
+function getChineseMeanings(word) {
+  const dictionary = typeof chineseMeanings !== 'undefined' ? chineseMeanings : {};
+  if (!word) return [];
+  return dictionary[word.toLowerCase()] || [];
+}
+
 function renderDefinition(entry) {
   const meaningsHtml = entry.meanings.map((meaning) => {
     const defs = meaning.definitions.map((def) => {
@@ -441,6 +447,13 @@ function renderDefinition(entry) {
   }).join('');
 
   const phoneticsSection = renderPhonetics(entry.phonetics);
+  const chineseMeanings = getChineseMeanings(entry.word);
+  const chineseSection = chineseMeanings.length > 0
+    ? `<section class="chinese-meanings">
+         <h3>Chinese meaning</h3>
+         <ul>${chineseMeanings.map((meaning) => `<li>${meaning}</li>`).join('')}</ul>
+       </section>`
+    : '';
 
   return `
     <article class="entry">
@@ -449,6 +462,7 @@ function renderDefinition(entry) {
       ${phoneticsSection}
       ${entry.origin ? `<p class="origin">Origin: ${entry.origin}</p>` : ''}
       ${meaningsHtml}
+      ${chineseSection}
     </article>`;
 }
 
