@@ -5,6 +5,7 @@
 - [ ] API returns no result for common words like Monday, Sunday, June.
 - [ *] Voice input not supported in iPhone Safari; decide whether to hide it or provide a fallback.
 - [ ] Clear button duplicates browser native clear button in some browsers.
+- [ ] mobile first time open the page, the input box is too high above the top of the browser, user need to scrol down the find the input box
 
 ## Improvements
 
@@ -17,6 +18,9 @@
 - [ ] change all icon to consistent style
 - [ ] remove duplicate pronunciations of one word
 - [ ] search input box position adjust
+- [ ] using "show more" when english definition is too long, only show the first one or two lines
+- [ ] put chinese meaning after audio and before english definition
+- [ ] mobile phone icon too small
 
 ## Product Decisions to Revisit
 
