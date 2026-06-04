@@ -128,13 +128,13 @@ function startVoiceListening() {
 
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) {
-    showMessage('Voice search is not supported by this browser.');
+    showEphemeralNotice('Voice search is not supported by this browser.');
     return;
   }
 
   recognition = createRecognition();
   if (!recognition) {
-    showMessage('Voice search is not supported by this browser.');
+    showEphemeralNotice('Voice search is not supported by this browser.');
     return;
   }
 
