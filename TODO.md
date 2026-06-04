@@ -12,8 +12,17 @@
 - [ *] Test history dropdown on iPhone.
 - [ ] Add Chinese meanings.
 - [ *] Add example sentence audio.
+- [ ] change "0.5x" to "slow"
+- [ ] adjust example sentence speaker icon in front of the first line
+- [ ] change all icon to consistent style
+- [ ] remove duplicate pronunciations of one word
+- [ ] search input box position adjust
 
 ## Product Decisions to Revisit
 
 - [ ] Decide whether to rely on browser native clear button or custom clear button.
 - [ ] Decide whether proper nouns/months/weekdays need a fallback dictionary.
+
+## New Feature
+
+- [ ] add chinese meanings
