@@ -241,6 +241,7 @@ Only add search history functionality.
 ## Day 19
 
 - make the app more mobile friendly whitout change all funcitons
+- using VS Code Live Server + mac IP(ipconfig getifaddr en0), generate an address like 192.168.0.11:5500 to let iphone access to my project webpage under the same Wifi
 - Found and fixed the problem that "script.js" been added twice
 - Asked AI helped remove all duplication in html
 

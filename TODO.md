@@ -25,4 +25,8 @@
 
 ## New Feature
 
-- [ ] add chinese meanings
+- [ *] add chinese meanings
+
+## Learning plan
+
+- front end basic concept like: flex, gap, position, padding, media query to help debug with AI assistant
