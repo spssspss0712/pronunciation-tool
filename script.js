@@ -375,40 +375,40 @@ function renderPhonetics(phonetics) {
     return '';
   }
 
-  const phoneticsHtml = phonetics.map((phonetic) => {
-    const audioButton = phonetic.audio
-      ? `<button type="button" class="play-audio" data-audio="${phonetic.audio}" title="Play audio">🔊</button>`
-      : '';
-    const toggleSwitch = phonetic.audio
-      ? `<label class="slow-speed-label" style="display:none; align-items:center; gap:0.5rem;">
-          <span style="font-size:0.9rem;">Slow</span>
-          <div style="position:relative; width:40px; height:22px; background:#ccc; border-radius:11px; cursor:pointer; transition:background 0.3s;">
-            <input class="slow-speed-toggle" type="checkbox" style="opacity:0; position:absolute; width:0; height:0; cursor:pointer;" />
-            <span style="position:absolute; top:2px; left:2px; width:18px; height:18px; background:white; border-radius:50%; transition:left 0.3s;" class="toggle-slider"></span>
-          </div>
-        </label>`
-      : '';
-    const mouthBlock = phonetic.audio
-      ? `<div class="mouth-shape" aria-hidden="true">
-          <div class="mouth-figure mouth-frame-0">
-            <div class="upper"></div>
-            <div class="lower"></div>
-          </div>
-        </div>`
-      : '';
+  const selectedPhonetic = phonetics.find((p) => p.audio) || phonetics[0];
 
-    return `
-      <div class="phonetic-item">
-        <div class="phonetic-content">
-          <div class="phonetic-main">
-            <span class="phonetic-text">${phonetic.text || ''}</span>
-            ${audioButton}
-          </div>
-          ${toggleSwitch}
+  const audioButton = selectedPhonetic.audio
+    ? `<button type="button" class="play-audio" data-audio="${selectedPhonetic.audio}" title="Play audio">🔊</button>`
+    : '';
+  const toggleSwitch = selectedPhonetic.audio
+    ? `<label class="slow-speed-label" style="display:none; align-items:center; gap:0.5rem;">
+        <span style="font-size:0.9rem;">Slow</span>
+        <div style="position:relative; width:40px; height:22px; background:#ccc; border-radius:11px; cursor:pointer; transition:background 0.3s;">
+          <input class="slow-speed-toggle" type="checkbox" style="opacity:0; position:absolute; width:0; height:0; cursor:pointer;" />
+          <span style="position:absolute; top:2px; left:2px; width:18px; height:18px; background:white; border-radius:50%; transition:left 0.3s;" class="toggle-slider"></span>
         </div>
-        ${mouthBlock}
-      </div>`;
-  }).join('');
+      </label>`
+    : '';
+  const mouthBlock = selectedPhonetic.audio
+    ? `<div class="mouth-shape" aria-hidden="true">
+        <div class="mouth-figure mouth-frame-0">
+          <div class="upper"></div>
+          <div class="lower"></div>
+        </div>
+      </div>`
+    : '';
+
+  const phoneticsHtml = `
+    <div class="phonetic-item">
+      <div class="phonetic-content">
+        <div class="phonetic-main">
+          <span class="phonetic-text">${selectedPhonetic.text || ''}</span>
+          ${audioButton}
+        </div>
+        ${toggleSwitch}
+      </div>
+      ${mouthBlock}
+    </div>`;
 
   return `
     <section class="phonetics">

@@ -259,3 +259,11 @@ Only add search history functionality.
 ## Next
 
 - add chinese meanings
+
+## Day 21
+
+- show one phonetic if possible
+
+## Next
+
+- show chinese meaning before english definition
