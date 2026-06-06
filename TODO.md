@@ -16,12 +16,17 @@
 - [ *] only show the one phonetic with audio if possible
 - [ *] using "show more" when english definition is too long, only show the first one or two lines
 - [ *] put chinese meaning after audio and before english definition
-- [ ] mobile display month mimic not at right side of audio button
+- [ *] mobile display month mimic not at right side of audio button
+- [ *] remove duplicate pronunciations of one word
 - [ ] adjust example sentence speaker icon in front of the first line
 - [ ] change all icon to consistent style
-- [ ] remove duplicate pronunciations of one word
+- [] only show one english definition, hide/folded remaining using show more/show less
+- mobile end
 - [ ] search input box position adjust
 - [ ] mobile phone icon too small
+- [ ] character style improvement
+- [] spacing adjust
+- [] card layout
 
 ## Product Decisions to Revisit
 
@@ -31,6 +36,7 @@
 ## New Feature
 
 - [ *] add chinese meanings
+- [ ] PWA（Add to Home Screen）
 
 ## Learning plan
 
