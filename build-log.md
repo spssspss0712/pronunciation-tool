@@ -267,3 +267,12 @@ Only add search history functionality.
 ## Next
 
 - show chinese meaning before english definition
+
+## Day 22
+
+- show chinese meaning before english definition
+
+## Next
+
+- only show one or two english definitions
+- using "show more" when there are more defintions

@@ -460,9 +460,9 @@ function renderDefinition(entry) {
       <h2>${entry.word}</h2>
       <!--${entry.phonetic ? `<p class="phonetic-primary">Pronunciation: ${entry.phonetic}</p>` : ''} -->
       ${phoneticsSection}
+      ${chineseSection}
       ${entry.origin ? `<p class="origin">Origin: ${entry.origin}</p>` : ''}
       ${meaningsHtml}
-      ${chineseSection}
     </article>`;
 }
 
