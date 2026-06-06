@@ -425,7 +425,7 @@ function getChineseMeanings(word) {
 
 function renderDefinition(entry) {
   const meaningsHtml = entry.meanings.map((meaning) => {
-    const defs = meaning.definitions.map((def) => {
+    const allDefs = meaning.definitions.map((def) => {
       const example = def.example
         ? `<div class="example">
              <button type="button" class="play-sentence" aria-label="Play example sentence">🔊</button>
@@ -437,12 +437,30 @@ function renderDefinition(entry) {
           <div class="definition-text">${def.definition}</div>
           ${example}
         </div>`;
-    }).join('');
+    });
+
+    const visibleDefs = allDefs.slice(0, 2).join('');
+    const extraDefs = allDefs.slice(2);
+    const hasExtra = extraDefs.length > 0;
+    
+    const defContainerId = `def-container-${Math.random().toString(36).substr(2, 9)}`;
+    const extraDefsHtml = hasExtra ? extraDefs.join('') : '';
+    
+    const toggleHtml = hasExtra
+      ? `<div class="definition-toggle-group">
+           <button type="button" class="definition-toggle-more" data-container="${defContainerId}">show more ⌄</button>
+           <div class="definition-extra" id="${defContainerId}" style="display:none;">
+             ${extraDefsHtml}
+             <button type="button" class="definition-toggle-less" data-container="${defContainerId}">show less ⌃</button>
+           </div>
+         </div>`
+      : '';
 
     return `
       <section class="meaning">
         <h3>${meaning.partOfSpeech}</h3>
-        ${defs}
+        ${visibleDefs}
+        ${toggleHtml}
       </section>`;
   }).join('');
 
@@ -601,6 +619,35 @@ function attachSentenceAudioHandlers() {
   });
 }
 
+function attachDefinitionToggleHandlers() {
+  document.querySelectorAll('.definition-toggle-more').forEach((btn) => {
+    btn.addEventListener('click', (event) => {
+      event.preventDefault();
+      const containerId = btn.dataset.container;
+      const container = document.getElementById(containerId);
+      if (container) {
+        container.style.display = 'block';
+        btn.style.display = 'none';
+      }
+    });
+  });
+
+  document.querySelectorAll('.definition-toggle-less').forEach((btn) => {
+    btn.addEventListener('click', (event) => {
+      event.preventDefault();
+      const containerId = btn.dataset.container;
+      const container = document.getElementById(containerId);
+      const moreBtn = document.querySelector(`.definition-toggle-more[data-container="${containerId}"]`);
+      if (container) {
+        container.style.display = 'none';
+      }
+      if (moreBtn) {
+        moreBtn.style.display = 'inline-block';
+      }
+    });
+  });
+}
+
 function updateToggleStyle(toggle, toggleLabel) {
   const toggleContainer = toggleLabel.querySelector('div');
   const toggleSlider = toggleLabel.querySelector('.toggle-slider');
@@ -635,6 +682,7 @@ async function searchWord(word) {
     resultEl.innerHTML = entries.map(renderDefinition).join('');
     attachAudioHandlers();
     attachSentenceAudioHandlers();
+    attachDefinitionToggleHandlers();
     addToHistory(trimmedWord);
     hideDropdown();
   } catch (error) {

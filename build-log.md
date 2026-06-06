@@ -276,3 +276,12 @@ Only add search history functionality.
 
 - only show one or two english definitions
 - using "show more" when there are more defintions
+
+## Day 23
+
+- improve english definiton display
+- using "show more/show less" to wrap/unwrap english definitons
+
+## Next
+
+- adjust example sentence speaker icon in front of the first line

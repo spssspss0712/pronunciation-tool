@@ -18,8 +18,8 @@
 - [ ] remove duplicate pronunciations of one word
 - [ ] search input box position adjust
 - [ *] only show the one phonetic with audio if possible
-- [ ] using "show more" when english definition is too long, only show the first one or two lines
-- [ ] put chinese meaning after audio and before english definition
+- [ *] using "show more" when english definition is too long, only show the first one or two lines
+- [ *] put chinese meaning after audio and before english definition
 - [ ] mobile phone icon too small
 
 ## Product Decisions to Revisit
