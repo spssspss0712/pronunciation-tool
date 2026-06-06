@@ -254,9 +254,23 @@
           padding: 0;
         }
         .phonetic-item {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 0.75rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          flex-wrap: wrap;
+        }
+        .phonetic-content {
+          flex: 1 1 0;
+          min-width: 0;
+        }
+        .mouth-shape {
+          justify-self: auto;
+          flex: 0 0 auto;
+        }
+        .mouth-figure {
+          width: 88px;
+          height: 66px;
         }
         .search-field {
           width: 100%;

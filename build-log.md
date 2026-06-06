@@ -281,6 +281,7 @@ Only add search history functionality.
 
 - improve english definiton display
 - using "show more/show less" to wrap/unwrap english definitons
+- adjust mobile month animation display
 
 ## Next
 

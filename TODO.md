@@ -13,13 +13,14 @@
 - [ *] Test history dropdown on iPhone.
 - [ *] Add example sentence audio.
 - [ *] change "0.5x" to "slow"
+- [ *] only show the one phonetic with audio if possible
+- [ *] using "show more" when english definition is too long, only show the first one or two lines
+- [ *] put chinese meaning after audio and before english definition
+- [ ] mobile display month mimic not at right side of audio button
 - [ ] adjust example sentence speaker icon in front of the first line
 - [ ] change all icon to consistent style
 - [ ] remove duplicate pronunciations of one word
 - [ ] search input box position adjust
-- [ *] only show the one phonetic with audio if possible
-- [ *] using "show more" when english definition is too long, only show the first one or two lines
-- [ *] put chinese meaning after audio and before english definition
 - [ ] mobile phone icon too small
 
 ## Product Decisions to Revisit
