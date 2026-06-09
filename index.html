@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pronunciation Tool</title>
+    <meta name="description" content="A lightweight tool for English learners to look up word pronunciations, practice listening, and improve speaking.">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Pronunciation">
+    <link rel="icon" type="image/png" href="homescreen-icon.png">
+    <link rel="apple-touch-icon" href="homescreen-icon.png">
+    <link rel="manifest" href="manifest.json">
     <style>
       html {
         box-sizing: border-box;
@@ -335,5 +343,10 @@
     </div>
     <script src="chinese-dictionary.js"></script>
     <script src="script.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js');
+      }
+    </script>
 </body>
 </html>
