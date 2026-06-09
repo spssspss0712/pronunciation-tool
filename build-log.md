@@ -294,3 +294,22 @@ Only add search history functionality.
 ## Next
 
 - todo list improvements
+
+```
+V0.1 released
+
+Major features:
+- Word pronunciation lookup
+- Audio playback
+- Slow playback
+- Example audio
+- Chinese meanings
+- Search history
+- PWA Home Screen support
+
+Key lessons:
+- AI-assisted development
+- Mobile testing
+- LocalStorage
+- Audio API
+```
