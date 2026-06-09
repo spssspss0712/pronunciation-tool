@@ -36,7 +36,7 @@
 ## New Feature
 
 - [ *] add chinese meanings
-- [ ] PWA（Add to Home Screen）
+- [ *] PWA（Add to Home Screen）
 
 ## Learning plan
 

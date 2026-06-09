@@ -286,3 +286,11 @@ Only add search history functionality.
 ## Next
 
 - adjust example sentence speaker icon in front of the first line
+
+## Day 24
+
+- add icon to home screen on iphone
+
+## Next
+
+- todo list improvements
