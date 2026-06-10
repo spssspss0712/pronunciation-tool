@@ -27,6 +27,7 @@
 - [ ] character style improvement
 - [] spacing adjust
 - [] card layout
+- [ ] Voice input appears on iPhone after GitHub Pages deployment, but still fails to start after Apple speech permission prompt. Treat voice input as experimental/progressive enhancement.
 
 ## Product Decisions to Revisit
 
