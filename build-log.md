@@ -313,3 +313,16 @@ Key lessons:
 - LocalStorage
 - Audio API
 ```
+
+## Day 25
+
+- deploy app to github pages
+- project visibility should be "public" to use free Github Pages
+- if the visibility of a repo is "private", you need to upgrade to github pro(not copilot pro) to use Github Pages
+- now user can use this link https://spssspss0712.github.io/pronunciation-tool/ to visit this app
+
+- update mnifest.json settings
+
+## Next
+
+- collect bugs and feedbacks from user
